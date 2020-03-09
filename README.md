@@ -9,7 +9,7 @@ Create a web or mobile application to allow Scrum teams to play Planning Poker.
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-TBD             | TBD             | TBD                  | Scrum Master
+Davis           | Kira            | kiradavis695         | Scrum Master
 Meier           | Geoffrey        | geoffreymeier        | Product Owner
 Wilkins         | Cayson          | caysonwilkins        | Developer
 

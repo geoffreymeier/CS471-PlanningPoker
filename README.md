@@ -1,9 +1,9 @@
 ## Team Name: TBD
 
-## Project Name: TBD
+## Project Name: Planning Poker
 
 ## Project Description:
-TBD (e.g., build an iOS app for TBD)
+Create a web or mobile application to allow Scrum teams to play Planning Poker.
 
 ## Team Members:
 

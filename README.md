@@ -1,4 +1,4 @@
-## Team Name: TBD
+## Team Name: Team 7
 
 ## Project Name: Planning Poker
 
@@ -9,11 +9,9 @@ Create a web or mobile application to allow Scrum teams to play Planning Poker.
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-TBD             | TBD             | TBD                  | TBDDeveloper
-TBD             | TBD             | TBD                  | TBDScrum Master
-TBD             | TBD             | TBD                  | TBDProduct Owner
-TBD             | TBD             | TBD                  | TBD
-TBD             | TBD             | TBD                  | TBD
+TBD             | TBD             | TBD                  | Scrum Master
+Meier           | Geoffrey        | geoffreymeier        | Product Owner
+TBD             | TBD             | TBD                  | Developer
 
 ## Team Velocity:
 

@@ -11,7 +11,7 @@ Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
 TBD             | TBD             | TBD                  | Scrum Master
 Meier           | Geoffrey        | geoffreymeier        | Product Owner
-TBD             | TBD             | TBD                  | Developer
+Wilkin          | Cayson          | caysonwilkins        | Developer
 
 ## Team Velocity:
 

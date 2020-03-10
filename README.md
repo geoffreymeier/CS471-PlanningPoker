@@ -12,6 +12,7 @@ Last Name       | First Name      | GitHub User Name     | Scrum Role
 Davis           | Kira            | kiradavis695         | Scrum Master
 Meier           | Geoffrey        | geoffreymeier        | Product Owner
 Wilkins         | Cayson          | caysonwilkins        | Developer
+Nguyen          | Lam             | lammmnnn             | Developer
 
 ## Team Velocity:
 

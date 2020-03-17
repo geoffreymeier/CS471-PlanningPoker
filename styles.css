@@ -1,14 +1,5 @@
-h1, h2, h3, h4, h5 {
-  color: black;
-  font-weight: bold;
-}
-
-body {
-  padding: 20px;
-}
-
 /* CSS Reset (gets rid of default styling)
-   http://meyerweb.com/eric/tools/css/reset/ 
+   http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -22,8 +13,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -34,7 +25,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -55,4 +46,74 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+/*=========== START ============*/
+html {
+
+}
+h1, h2, h3, h4, h5 {
+  color: black;
+  font-weight: bold;
+    font-family: Candara;
+}
+h1 {
+  color: white;
+  font-size: 35px;
+  text-shadow: 1px 1px 5px #202020;
+}
+h2 {
+  margin: 0px 0px 20px 0px;
+  font-weight: bold;
+  font-size: 23px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 20px;
+  /* background-color: #0466D2; */
+  /* green: #38ba61, blue: #044DE2 */
+  background-image: linear-gradient(to right, #38ba61 , #4B90F7);
+}
+main {
+  padding: 40px;
+  background: #ffffff
+  max-width: 900px;
+  margin: auto;
+}
+p {
+  margin: 0px 0px 10px 0px;
+}
+label {
+  font-size: 14px;
+}
+input, textarea {
+  margin: 10px 0px 10px 0px;
+  padding: 16px 16px;
+  font-size: 16px;
+}
+input[type=number] {
+  background-color: #f2f2f2;
+  border: none;
+  min-width: 200px;
+}
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+input[type=reset] {
+  background-color: #f44336;
+}
+input[type=submit] {
+  /* background-image: linear-gradient(to right, #046CD2, #38ba61); */
+  background-color: #046CD2;
+}
+input[type=submit]:hover {
+  background-color: #38ba61;
 }

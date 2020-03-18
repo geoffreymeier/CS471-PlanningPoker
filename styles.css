@@ -77,7 +77,7 @@ body {
 }
 main {
   padding: 40px;
-  background: #ffffff;
+
   max-width: 900px;
   margin: auto;
 }
@@ -116,4 +116,7 @@ input[type=submit] {
 }
 input[type=submit]:hover {
   background-color: #38ba61;
+}
+main {
+  background: #ffffff
 }

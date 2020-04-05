@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE php>
 <html>
 <!-- This will eventually be the Home page -->
 
@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <a href="lobby.html">Lobby</a>
+    <a href="lobby.php">Lobby</a>
 </body>
 
 </html>

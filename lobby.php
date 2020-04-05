@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE php>
 <html>
 
 <head>
@@ -20,7 +20,7 @@
         </div>
 
         <div id="lobbyform">
-            <form>
+            <form method="POST" action="game.php">
                 <label for="numplayers">Number of players: </label><br>
                 <!--I defined the max number of players as 20; however, we can change this if need be-->
                 <input type="number" id="numplayers" name="numplayers" min="1" max="20" placeholder="e.g. 8"

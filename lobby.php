@@ -45,7 +45,7 @@ session_start();
                 <textarea name="stories" id="stories" cols="60" rows="10"
                     placeholder="Enter each user story on a separate line" required></textarea><br><br>
                 <!--Submit button takes you to the game.php page-->
-                <input type="submit" id="submit" value="Create Game">
+                <input type="submit" id="submit" value="Create Game" onclick="return handleChange()">
                 <input type="reset" id="reset">
             </form>
         </div>
@@ -54,3 +54,28 @@ session_start();
 </body>
 
 </html>
+
+<script type="text/javascript">
+function handleChange(input) {
+    var nP = document.getElementById("numplayers").value;
+    var vel = document.getElementById("velocity").value;
+    var area = document.getElementById("stories");
+    var arrayOfStories = area.value.replace(/\r\n/g,"\n").split("\n");
+    if (nP < 1 || nP > 20) {
+        alert("Value should be between 1 - 20");
+        return false;
+    }
+    if (vel < 1) {
+      alert("Velocity should be greater than 0");
+      return false;
+    }
+    if (typeof arrayOfStories == "undefined"
+                        || arrayOfStories == null
+                        || arrayOfStories == null
+                        || arrayOfStories <= 0){
+      alert("User stories cannot be empty!");
+      return false;
+    }
+   return true;
+}
+</script>

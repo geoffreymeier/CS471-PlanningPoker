@@ -1,4 +1,7 @@
 <!DOCTYPE php>
+<?php
+session_stert();
+?>
 <html>
 
 <head>
@@ -41,7 +44,7 @@
                 <label for="stories">User Stories:</label><br>
                 <textarea name="stories" id="stories" cols="60" rows="10"
                     placeholder="Enter each user story on a separate line" required></textarea><br><br>
-
+                <!--Submit button takes you to the game.php page-->
                 <input type="submit" id="submit" value="Create Game">
                 <input type="reset" id="reset">
             </form>

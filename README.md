@@ -19,8 +19,8 @@ Wilkins         | Cayson          | caysonwilkins        | Developer
 
 Sprint | Estimated Velocity | Actual Velocity
 ------ | ------------------ | ---------------
-1      | 21                 | TBD
-2      | TBD                | TBD
+1      | 21                 | 21
+2      | 22                 | TBD
 3      | TBD                | TBD
 4      | TBD                | TBD
 

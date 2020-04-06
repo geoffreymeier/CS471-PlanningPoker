@@ -1,6 +1,6 @@
 <!DOCTYPE php>
 <?php
-session_stert();
+session_start();
 ?>
 <html>
 

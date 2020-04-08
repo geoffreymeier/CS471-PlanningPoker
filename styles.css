@@ -123,3 +123,22 @@ input[type=submit]:hover {
 	text-align: center;
 	max-width: 100px;
 }
+#getStarted {
+  display: block;
+  background-color: #046CD2;
+  border: none;
+  padding: 16px 32px;
+  margin: 40px auto;
+  width: 11em;
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+#getStarted:hover {
+  font-weight: bold;
+  background-color: #38ba61;
+}
+

@@ -152,3 +152,149 @@ li {
 	color: white;
 	text-decoration: none;
 }
+
+/*=========== GAMEPAGE ============*/
+
+/* Split the screen in half */
+.split {
+  position: fixed;
+  z-index: 1;
+  top: 70;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+/* Control the left side */
+.left {
+	height: 100%;
+	width: 79%;
+  left: 10;
+}
+/* Control the right side */
+.right {
+	height: 100%;
+	width: 20.5%;
+  right: 0;
+}
+/* Control the top and bottom section inside left and right side */
+.ltop {
+	height: 77%;
+  background-color: white;
+	border-radius: 8px 0px 0px 0px;
+}
+.lbottom {
+	height: 22.8%;
+  background-color: F5F5F5;
+	border-top: 2px solid #E5E5E5;
+}
+.rtop {
+	height: 77%;
+  background-color: EAEAEA;
+}
+.rbottom {
+	height: 23%;
+  background-color: 828282;
+	text-align: center;
+}
+
+/*-- gamepage's items --*/
+
+button[type="button"] {
+  background-color: #0572DC;
+  border: none;
+	border-radius: 5px;
+  color: white;
+  padding: 8px 20px;
+  text-decoration: none;
+  font-size: 15px;
+  margin: 4px 2px;
+  cursor: pointer;
+	transition: all .12s ease-in-out;
+}
+
+button[id="nextplayerbutton"] {
+	background-color: #04CF3A;
+}
+
+button[id="nextplayerbutton"]:hover {
+	background-color: #06DF19;
+	transform: scale(1.04) perspective(1px)
+}
+
+button[id="resetbutton"] {
+	background-color: #F99B0F;
+}
+
+button[id="resetbutton"]:hover {
+	background-color: #F3A410;
+	transform: scale(1.04) perspective(1px)
+}
+
+button[class="bluebutton"]:hover {
+	background-color: #087CCF;
+	transform: scale(1.04) perspective(1px)
+}
+
+button[disabled] {
+	background-color: #ABABAB;
+}
+
+label[class="pushdown"] {
+	color: F1F1F1;
+}
+
+button[class="card"] {
+	background-color: #0572DC;
+  border: solid;
+	border-color: black;
+	border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  font-size: 30px;
+  margin: 4px 3.5px;
+  cursor: pointer;
+	padding: 56px 46px;
+	width: 119.5px;
+	transition: all .22s ease-in-out;
+}
+
+button[class="card"]:hover {
+	transform: scale(1.05) perspective(1px)
+}
+
+button[id="noClueCard"] {
+	background-color: white;
+	color: gray;
+}
+
+div[id="storynumsect"] {
+	text-align: center;
+}
+
+div[id="blacksect"] {
+	margin-top: 12px;
+	height: 40px;
+	background-color: #828282;
+	text-align: center;
+}
+
+div[class="belowblacksect"] {
+	height: 40px;
+	text-align: center;
+	border: 1px solid #DFDFDF;
+}
+
+div[id="story0"] {
+	background-color: white;
+}
+
+label[id="s"] {
+	color: white;
+	font-size: 24px;
+}
+
+button[id="addstorybutton"] {
+	background-color: #FF8300;
+	width: 95%;
+	height: 30%;
+	font-size: 30px;
+}

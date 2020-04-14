@@ -11,6 +11,11 @@ $currentstory = 0;
 $isPrevDisabled = true;
 $isNextDisabled = true;
 $nextPlayerButtonName = "Next Player";
+
+// This is where the answers will be stored, we should use array_push to add to it. this would allow for
+// the array to have a changeable size even if we wanted to add a story in the middle.
+$answers = array();
+
 if ($numPlayers == 1) $nextPlayerButtonName = "See Results";
 
 if (sizeof($storiesArray) > 1) $isNextDisabled = false;

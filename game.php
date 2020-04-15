@@ -141,6 +141,8 @@ if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
         + "/" + storiesArray.length;
         storyid = "story" + currentstory.toString();
         document.getElementById(storyid).style.backgroundColor = "white";
+      } else {
+        document.getElementById("nextplayerbutton").innerHTML = "See Results";
       }
     }
 
@@ -149,6 +151,9 @@ if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
         if(currentstory==storiesArray.length-1) {
           document.getElementById("nextbutton").disabled = false;
           document.getElementById("nextbutton").style.backgroundColor="#0572DC";
+          if (<?php echo json_encode($numPlayers); ?> > 1
+            && <?php echo json_encode($currentplayer); ?> < <?php echo json_encode($numPlayers); ?> - 1)
+             document.getElementById("nextplayerbutton").innerHTML = "Next Player";
         } else if(currentstory <= 1) {
           document.getElementById("prevbutton").disabled = true;
           document.getElementById("prevbutton").style.backgroundColor="#ABABAB";

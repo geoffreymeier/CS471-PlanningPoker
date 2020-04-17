@@ -94,7 +94,7 @@ input[type=number], textarea {
   border: none;
   min-width: 200px;
 }
-input[type=button], input[type=submit], input[type=reset] {
+input[type=button], input[type=submit], input[type=reset], .button {
   background-color: #008CBA;
   border: none;
   color: white;
@@ -113,6 +113,9 @@ input[type=submit] {
 }
 input[type=submit]:hover {
   background-color: #38ba61;
+}
+#createNewGame {
+	background-color: #38BA61;
 }
 #lobbyButton {
 	background-color: #046CD2;
@@ -297,4 +300,7 @@ button[id="addstorybutton"] {
 	width: 95%;
 	height: 30%;
 	font-size: 30px;
+}
+ul ul {
+	margin-left: 20px;
 }

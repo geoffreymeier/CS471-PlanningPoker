@@ -1,6 +1,7 @@
 <!DOCTYPE php>
 <!--DATA-->
 <?php
+session_start();
 $numPlayers = $_POST['numplayers'];
 $velocity = $_POST['velocity'];
 $stories = trim($_POST['stories']);
@@ -29,6 +30,10 @@ $cardSetChosen = 0;
 if ($_POST['cardset'] == 'modfibonacci') $cardSetChosen = 1;
 if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
 if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
+
+$_SESSION['numplayers'] = $_POST['numplayers'];
+$_SESSION['velocity'] = $_POST['velocity'];
+$_SESSION['storiesArray'] = $storiesArray;
 ?>
 
 <head>

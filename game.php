@@ -135,7 +135,7 @@ $_SESSION['storiesArray'] = $storiesArray;
         if(currentstory==0) {
           document.getElementById("prevbutton").disabled = false;
           document.getElementById("prevbutton").style.backgroundColor="#0572DC";
-        } else if(currentstory >= storiesArray.length-2) {
+        } if(currentstory >= storiesArray.length-2) {
           document.getElementById("nextbutton").disabled = true;
           document.getElementById("nextbutton").style.backgroundColor="#ABABAB";
         }
@@ -148,9 +148,11 @@ $_SESSION['storiesArray'] = $storiesArray;
         + "/" + storiesArray.length;
         storyid = "story" + currentstory.toString();
         document.getElementById(storyid).style.backgroundColor = "white";
-      } else {
-        document.getElementById("nextplayerbutton").innerHTML = "See Results";
-      }
+      } 
+      // This should not be here, as it should be handled by the Next Player button 
+      // else {
+      //   document.getElementById("nextplayerbutton").innerHTML = "See Results";
+      // }
     }
 
     function prevbutton() {
@@ -161,7 +163,7 @@ $_SESSION['storiesArray'] = $storiesArray;
           if (<?php echo json_encode($numPlayers); ?> > 1
             && <?php echo json_encode($currentplayer); ?> < <?php echo json_encode($numPlayers); ?> - 1)
              document.getElementById("nextplayerbutton").innerHTML = "Next Player";
-        } else if(currentstory <= 1) {
+        } if(currentstory <= 1) {
           document.getElementById("prevbutton").disabled = true;
           document.getElementById("prevbutton").style.backgroundColor="#ABABAB";
         }

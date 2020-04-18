@@ -17,13 +17,14 @@ session_start();
     </header>
 
     <main>
+    <div id="content">
         <div id="lobbytitle">
             <h2>Create a New Game</h2>
             <p>Fill in the criteria below to define the parameters for your game.</p><br>
         </div>
 
         <div id="lobbyform">
-            <form method="POST" action="game.php">
+            <form id="createGame" method="POST" action="game.php">
                 <label for="numplayers">Number of players: </label><br>
                 <!--I defined the max number of players as 20; however, we can change this if need be-->
                 <input type="number" id="numplayers" name="numplayers" min="1" max="20" placeholder="e.g. 8"
@@ -49,6 +50,7 @@ session_start();
                 <input type="reset" id="reset">
             </form>
         </div>
+    </div>
     </main>
 
 </body>

@@ -47,6 +47,7 @@ $_SESSION['storiesArray'] = $storiesArray;
   </header>
 
   <main>
+  <div id="content">
     <!--LEFT SIDE OF THE SCREEN-->
     <div class="split left">
       <!--TOPLEFT-->
@@ -118,6 +119,7 @@ $_SESSION['storiesArray'] = $storiesArray;
           <button type="button" id="endbutton">End Game</button>
         </div>
       </div>
+    </div>
     </main>
   </body>
 

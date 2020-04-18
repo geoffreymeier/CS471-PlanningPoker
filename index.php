@@ -1,9 +1,19 @@
 <!DOCTYPE php>
 <html>
-<!-- This will eventually be the Home page -->
 
 <head>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#getStarted").click(function(){
+            let page = "lobby.php #content";
+            $("main").fadeOut(function() {
+                $("main").load(page);
+            }).fadeIn();
+        });
+    });
+    </script>
     <title>Planning Poker</title>
 </head>
 
@@ -13,9 +23,12 @@
     </header>
 
     <main>
+    <div id="content">
         <p>Welcome to Planning Poker! This tool will help your scrum team vote on user stories and see detailed results, as well as make revoting on stories easier than ever. Click the button below to get started!</p>
-        <a href="lobby.php" id="getStarted">Let's get started!</a>
+        <p id="getStarted">Let's get started!</p>
+    </div>
     </main>
+    
 </body>
 
 </html>

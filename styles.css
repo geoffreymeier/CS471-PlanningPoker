@@ -138,8 +138,8 @@ input[type=submit]:hover {
   cursor: pointer;
 }
 #getStarted:hover {
-  font-weight: bold;
   background-color: #38ba61;
+	transform: scale(1.04) perspective(1px)
 }
 
 ul {
@@ -215,7 +215,16 @@ button[type="button"] {
 }
 
 button[id="nextplayerbutton"] {
-	background-color: #04CF3A;
+  background-color: #04CF3A;
+  border: none;
+	border-radius: 5px;
+  color: white;
+  padding: 8px 20px;
+  text-decoration: none;
+  font-size: 15px;
+  margin: 4px 2px;
+  cursor: pointer;
+	transition: all .12s ease-in-out;
 }
 
 button[id="nextplayerbutton"]:hover {
@@ -237,7 +246,7 @@ button[class="bluebutton"]:hover {
 	transform: scale(1.04) perspective(1px)
 }
 
-button[disabled] {
+button:disabled {
 	background-color: #ABABAB;
 }
 

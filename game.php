@@ -7,11 +7,10 @@ $velocity = $_POST['velocity'];
 $stories = trim($_POST['stories']);
 $storiesArray = explode("\n", $stories);
 $storiesArray = array_filter($storiesArray, 'trim');
-$currentplayer = 1;
+$currentplayer = 0;
 $currentstory = 0;
 $isPrevDisabled = true;
 $isNextDisabled = true;
-$nextPlayerButtonName = "Next Player";
 
 // This is where the answers will be stored, we should use array_push to add to it. this would allow for
 // the array to have a changeable size even if we wanted to add a story in the middle.
@@ -36,8 +35,10 @@ $_SESSION['velocity'] = $_POST['velocity'];
 $_SESSION['storiesArray'] = $storiesArray;
 ?>
 
+<html>
+
 <head>
-  <title>Lobby | Planning Poker</title>
+  <title>Planning Poker</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -55,20 +56,19 @@ $_SESSION['storiesArray'] = $storiesArray;
         <h2>
           <div id="currentStoryTitle">
 
-            <?php
-            echo "Story: &nbsp$storiesArray[0]";
-            ?>
+            <?php echo "Story: &nbsp$storiesArray[0] | Player ",$currentplayer+1; ?>
+            
           </div>
         </h2>
 
-        <button type="button" class="bluebutton" id="prevbutton" name="prevbutton" onclick="prevbutton()"
+        <button type="button" class="bluebutton" id="prevbutton" name="prevbutton" onclick="prevButton()"
         <?php echo $isPrevDisabled?'disabled':''; ?>>
         Previous Story</button>
-        <button type="button" class="bluebutton" id="nextbutton" name="nextbutton" onclick="nextbutton()"
+        <button type="button" class="bluebutton" id="nextbutton" name="nextbutton" onclick="nextButton()"
         <?php echo $isNextDisabled?'disabled':''; ?>>
         Next Story</button>
         <button type="button" id="resetbutton">Reset Cards</button>
-        <button type="button" id="nextplayerbutton" onclick="nextplayer()"><?php echo $nextPlayerButtonName; ?></button>
+        <button type="button" id="nextplayerbutton" onclick="nextPlayerButton()">Next Player</button>
 
           <br><br><br>
           <?php
@@ -125,69 +125,109 @@ $_SESSION['storiesArray'] = $storiesArray;
     </main>
   </body>
 
-
-
-<!--javascript for button onclick-->
+<!--javascript for button onclicks-->
   <script>
-  var currentstory = <?php echo json_encode($currentstory); ?>;
-  var currentplayer = <?php echo json_encode($currentplayer); ?>;
-  var storiesArray = <?php echo json_encode($storiesArray); ?>;
-  var playerAnswers = [[],[]];
+    let currentStory = <?php echo $currentstory; ?>;
+    let storiesArray = <?php echo json_encode($storiesArray); ?>;
+    let currentPlayer = <?php echo $currentplayer; ?>;
+    const NUM_PLAYERS = <?php echo $numPlayers; ?>;
+    const cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
+    const cardSets = <?php echo json_encode($cardSets); ?>;
+    let playerAnswers = initArray(NUM_PLAYERS,storiesArray.length);
 
-    function nextbutton() {
-      if(currentstory < storiesArray.length-1) {
-        if(currentstory==0) {
-          document.getElementById("prevbutton").disabled = false;
-          document.getElementById("prevbutton").style.backgroundColor="#0572DC";
-        } if(currentstory >= storiesArray.length-2) {
-          document.getElementById("nextbutton").disabled = true;
-          document.getElementById("nextbutton").style.backgroundColor="#ABABAB";
-        }
-        var storyid = "story" + currentstory.toString();
-        document.getElementById(storyid).style.backgroundColor = "#EAEAEA";
-        currentstory++;
-        document.getElementById("currentStoryTitle").innerHTML = 'Story1234: &nbsp'
-        + storiesArray[currentstory];
-        document.getElementById("currentStoryHeader").innerHTML = (currentstory+1).toString()
-        + "/" + storiesArray.length;
-        storyid = "story" + currentstory.toString();
-        document.getElementById(storyid).style.backgroundColor = "white";
-      } 
-      // This should not be here, as it should be handled by the Next Player button 
-      // else {
-      //   document.getElementById("nextplayerbutton").innerHTML = "See Results";
-      // }
+    if (NUM_PLAYERS>1) {
+      document.getElementById("nextplayerbutton").disabled = true;
     }
 
-    function prevbutton() {
-      if(currentstory > 0) {
-        if(currentstory==storiesArray.length-1) {
-          document.getElementById("nextbutton").disabled = false;
-          document.getElementById("nextbutton").style.backgroundColor="#0572DC";
-          if (<?php echo json_encode($numPlayers); ?> > 1
-            && <?php echo json_encode($currentplayer); ?> < <?php echo json_encode($numPlayers); ?> - 1)
-             document.getElementById("nextplayerbutton").innerHTML = "Next Player";
-        } if(currentstory <= 1) {
-          document.getElementById("prevbutton").disabled = true;
-          document.getElementById("prevbutton").style.backgroundColor="#ABABAB";
+    function nextButton() {
+      if (currentStory!==storiesArray.length-1) {
+        currentStory++;
+        updateUI();
+      } 
+    }
+
+    function prevButton() {
+      if (currentStory!==0) {
+        currentStory--;
+        updateUI();
+      }
+    }
+    
+    // Controls the functions of the next player button
+    function nextPlayerButton() {
+      if (currentStory===storiesArray.length-1) {
+        // Validate votes
+        for (let i=0; i<storiesArray.length; i++) {
+          if (playerAnswers[currentPlayer][i]==undefined) {
+            alert(`No vote recorded for Story ${i+1}: ${storiesArray[i]}. Please vote before moving to the next player.`);
+            return;
+          }
         }
-        var storyid = "story" + currentstory.toString();
-        document.getElementById(storyid).style.backgroundColor = "#EAEAEA";
-        currentstory--;
-        document.getElementById("currentStoryTitle").innerHTML = 'Story2345: &nbsp'
-        + storiesArray[currentstory];
-        document.getElementById("currentStoryHeader").innerHTML = (currentstory+1).toString()
-        + "/" + storiesArray.length;
-        storyid = "story" + currentstory.toString();
-        document.getElementById(storyid).style.backgroundColor = "white";
-        alert("hi");
+
+        if (currentPlayer===NUM_PLAYERS-1) {
+          //TODO: go to results page
+          let results = JSON.stringify(playerAnswers);
+          document.cookie = "results="+results;
+          window.location.href="results.php";
+        }
+        else {
+          currentPlayer++;
+          currentStory = 0;
+          updateUI();
+        }
       }
     }
 
+    // This function will update the UI based on the current values of currentPlayer, currentStory, etc.
+    function updateUI() {
+      /***  UPDATE THE RIGHT SIDEBAR ***/
+      for (let i=0; i<storiesArray.length; i++) {
+        let storyid = "story" + i;
+        document.getElementById(storyid).style.backgroundColor = (i===currentStory) ? "white" : "#EAEAEA";
+      }
+      document.getElementById("currentStoryHeader").innerHTML = (currentStory+1).toString() + "/" + storiesArray.length;
+      
+      /*** UPDATE THE NAVBAR ***/
+      document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]} | Player ${currentPlayer+1}`;
+      
+      // Previous Story Button
+      if (currentStory==0) 
+        document.getElementById("prevbutton").disabled = true;
+      else 
+        document.getElementById("prevbutton").disabled = false;
+      
+      // Next Story Button
+      if (currentStory==storiesArray.length-1)
+        document.getElementById("nextbutton").disabled = true;
+      else
+        document.getElementById("nextbutton").disabled = false;
+      
+      // Next Player Button
+      if (currentStory==storiesArray.length-1)
+        document.getElementById("nextplayerbutton").disabled = false;
+      else 
+        document.getElementById("nextplayerbutton").disabled = true;
+      if (currentPlayer===NUM_PLAYERS-1) 
+        document.getElementById("nextplayerbutton").innerHTML = "See Results";
+      else
+        document.getElementById("nextplayerbutton").innerHTML = "Next Player";
+    }
+
+    // Inputs the selected card into the result array
     function cardselect(value) {
-        var cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
-        var cardSets = <?php echo json_encode($cardSets); ?>;
-        
+      debugger;
+        playerAnswers[currentPlayer][currentStory] = cardSets[cardSetChosen][value];
         alert("you chose: " + cardSets[cardSetChosen][value]);
     }
+
+    // Simple helper method to construct the 2D array
+    function initArray(nrows, ncols) {
+      let array = new Array(nrows);
+      for (let i=0; i<nrows; i++) {
+        array[i] = new Array(ncols);
+      }
+      return array;
+    }
+
   </script>
+</html>

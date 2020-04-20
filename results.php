@@ -5,6 +5,8 @@ $velocity = $_SESSION['velocity'];
 $storiesArray = $_SESSION['storiesArray'];
 
 // TODO: we need the answers from game.php
+$resultsString = $_COOKIE['results'];
+$results = json_decode($resultsString);
 
 ?>
 <html>
@@ -24,6 +26,8 @@ $storiesArray = $_SESSION['storiesArray'];
     <main>
         <h2>Results</h2>
         <p>See the results of your planning poker game below.</p><br>
+		<!-- Below is just an example for verification that the results were successfully transferred. They still need processed -->
+		<p><?php echo $resultsString ?></p>
 
 		<p>TODO: display votes for each player for each story and average vote. Will probably need to style this as well.
 		</p>

@@ -7,7 +7,7 @@ $velocity = $_POST['velocity'];
 $stories = trim($_POST['stories']);
 $storiesArray = explode("\n", $stories);
 $storiesArray = array_filter($storiesArray, 'trim');
-$currentplayer = 0;
+$currentplayer = 1;
 $currentstory = 0;
 $isPrevDisabled = true;
 $isNextDisabled = true;
@@ -15,7 +15,7 @@ $nextPlayerButtonName = "Next Player";
 
 // This is where the answers will be stored, we should use array_push to add to it. this would allow for
 // the array to have a changeable size even if we wanted to add a story in the middle.
-$answers = array();
+$answers = array(array());
 
 if ($numPlayers == 1) $nextPlayerButtonName = "See Results";
 
@@ -68,7 +68,7 @@ $_SESSION['storiesArray'] = $storiesArray;
         <?php echo $isNextDisabled?'disabled':''; ?>>
         Next Story</button>
         <button type="button" id="resetbutton">Reset Cards</button>
-        <button type="button" id="nextplayerbutton"><?php echo $nextPlayerButtonName; ?></button>
+        <button type="button" id="nextplayerbutton" onclick="nextplayer()"><?php echo $nextPlayerButtonName; ?></button>
 
           <br><br><br>
           <?php
@@ -85,10 +85,12 @@ $_SESSION['storiesArray'] = $storiesArray;
           </div>
           <?php
           for ($j = 0; $j <= sizeof($cardSets[$cardSetChosen])-1; $j++) {
-              echo "<button class='card'>" . $cardSets[$cardSetChosen][$j] . "</button>";
+              echo "<button class='card' onclick='cardselect($j)'>" . $cardSets[$cardSetChosen][$j] . "</button>";
           }
           ?>
           <button class="card" id="noClueCard">?</button>
+        
+            
         </div>
       </div>
 
@@ -128,7 +130,9 @@ $_SESSION['storiesArray'] = $storiesArray;
 <!--javascript for button onclick-->
   <script>
   var currentstory = <?php echo json_encode($currentstory); ?>;
+  var currentplayer = <?php echo json_encode($currentplayer); ?>;
   var storiesArray = <?php echo json_encode($storiesArray); ?>;
+  var playerAnswers = [[],[]];
 
     function nextbutton() {
       if(currentstory < storiesArray.length-1) {
@@ -142,7 +146,7 @@ $_SESSION['storiesArray'] = $storiesArray;
         var storyid = "story" + currentstory.toString();
         document.getElementById(storyid).style.backgroundColor = "#EAEAEA";
         currentstory++;
-        document.getElementById("currentStoryTitle").innerHTML = 'Story: &nbsp'
+        document.getElementById("currentStoryTitle").innerHTML = 'Story1234: &nbsp'
         + storiesArray[currentstory];
         document.getElementById("currentStoryHeader").innerHTML = (currentstory+1).toString()
         + "/" + storiesArray.length;
@@ -170,12 +174,20 @@ $_SESSION['storiesArray'] = $storiesArray;
         var storyid = "story" + currentstory.toString();
         document.getElementById(storyid).style.backgroundColor = "#EAEAEA";
         currentstory--;
-        document.getElementById("currentStoryTitle").innerHTML = 'Story: &nbsp'
+        document.getElementById("currentStoryTitle").innerHTML = 'Story2345: &nbsp'
         + storiesArray[currentstory];
         document.getElementById("currentStoryHeader").innerHTML = (currentstory+1).toString()
         + "/" + storiesArray.length;
         storyid = "story" + currentstory.toString();
         document.getElementById(storyid).style.backgroundColor = "white";
+        alert("hi");
       }
+    }
+
+    function cardselect(value) {
+        var cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
+        var cardSets = <?php echo json_encode($cardSets); ?>;
+        
+        alert("you chose: " + cardSets[cardSetChosen][value]);
     }
   </script>

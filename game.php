@@ -5,6 +5,7 @@ session_start();
 $numPlayers = $_POST['numplayers'];
 $velocity = $_POST['velocity'];
 $stories = trim($_POST['stories']);
+$stories = str_replace("\r", "", $stories);
 $storiesArray = explode("\n", $stories);
 $storiesArray = array_filter($storiesArray, 'trim');
 $currentplayer = 0;
@@ -30,6 +31,7 @@ if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
 $_SESSION['numplayers'] = $_POST['numplayers'];
 $_SESSION['velocity'] = $_POST['velocity'];
 $_SESSION['storiesArray'] = $storiesArray;
+$_SESSION['cardset'] = $_POST['cardset'];
 ?>
 
 <html>

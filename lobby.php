@@ -47,7 +47,7 @@ setcookie('isRevoting','false');
                 <textarea name="stories" id="stories" cols="60" rows="10"
                     placeholder="Enter each user story on a separate line" required></textarea><br><br>
                 <!--Submit button takes you to the game.php page-->
-                <input type="submit" id="submit" value="Create Game" onclick="return handleChange()">
+                <input type="submit" id="submit" value="Create Game" onclick="handleChange()">
                 <input type="reset" id="reset">
             </form>
         </div>
@@ -59,11 +59,12 @@ setcookie('isRevoting','false');
 </html>
 
 <script type="text/javascript">
-function handleChange(input) {
+function handleChange() {
     var nP = document.getElementById("numplayers").value;
     var vel = document.getElementById("velocity").value;
     var area = document.getElementById("stories");
-    var arrayOfStories = area.value.replace(/\r\n/g,"\n").split("\n");
+    var arrayOfStories = area.value.replace(/\r\n|\n|\r/g,"\n");
+    arrayOfStories.split("\n");
     if (nP < 1 || nP > 20) {
         alert("Value should be between 1 - 20");
         return false;

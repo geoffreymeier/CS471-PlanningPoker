@@ -12,9 +12,12 @@ $results = json_decode($resultsString);
 <html>
 
 <head>
-    <title>Game | Planning Poker</title>
+    <title>Planning Poker</title>
     <link rel="stylesheet" href="styles.css">
 	<script src="resources.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <link href="graph_resources/jquery.dvstr_jqp_graph.css" rel="stylesheet" type="text/css"/>
+    <script src="graph_resources/jquery.dvstr_jqp_graph.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -49,8 +52,8 @@ $results = json_decode($resultsString);
 			?>
 			</ul>
 		</p>
-		<h3>Graph:</h3>
-		<p>TODO.</p>
+		<!-- <h3>Graph:</h3> -->
+		<div class="graph" id="graph"></div>
 		<br>
 		<!-- 
 		When creating the revote button onclick JS function, please add following line to
@@ -63,5 +66,52 @@ $results = json_decode($resultsString);
 	</main>
 
 </body>
+
+<script>
+// Set the following vars as constants, since we don't want to accidentally change them from this page
+const NUM_PLAYERS = <?php echo json_encode($numPlayers); ?>;
+const STORIES_ARRAY = <?php echo json_encode($storiesArray); ?>;
+const RESULTS = JSON.parse(getCookie('results'));
+const CARDSET = <?php echo json_encode($_SESSION['cardset']); ?>;
+
+// Since t-shirt sizes are incompatible with graph, display message instead of graph if that 
+// card set was used
+if (CARDSET !== "tshirts") 
+	createGraph();
+else
+	document.getElementById("graph").innerHTML = "<h2 style=\"color:red\">Note: Can't display graph for t-shirt card set; pick a different card set to use this feature.</h2><br>";
+
+
+// Create the results graph
+function createGraph() {
+	$('#graph').dvstr_graph({
+		title: 'Results Graph',
+		unit: 'Story Points',
+		separate: true,
+		graphs: getData(),
+	})
+}
+
+// Create the "graphs" option for the graph
+function getData() {
+	let array = [];
+	for (i=0; i<STORIES_ARRAY.length; i++) {
+		let jsonstr = "{";
+		//label
+		jsonstr += `"label":"${STORIES_ARRAY[i]}",`;
+		//color array
+		jsonstr += `"color":[`;
+		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `"${getGraphColor(j)}",`;
+		jsonstr += `"${getGraphColor(NUM_PLAYERS-1)}"],`;
+		//value array
+		jsonstr += `"value":[`;
+		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `${RESULTS[j][i]},`;
+		jsonstr += `${RESULTS[NUM_PLAYERS-1][i]}]}`;
+		debugger;
+		array.push(JSON.parse(jsonstr));
+	}
+	return array;
+}
+</script>
 
 </html>

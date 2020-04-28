@@ -14,6 +14,7 @@ $results = json_decode($resultsString);
 <head>
     <title>Game | Planning Poker</title>
     <link rel="stylesheet" href="styles.css">
+	<script src="resources.js"></script>
 </head>
 
 <body>
@@ -51,6 +52,11 @@ $results = json_decode($resultsString);
 		<h3>Graph:</h3>
 		<p>TODO.</p>
 		<br>
+		<!-- 
+		When creating the revote button onclick JS function, please add following line to
+		execute if revoting (this will set the revoting flag for the game page):
+		document.cookie = "isRevoting=true"
+		-->
 		<a href="game.php" class="button">Revote</a>
         <a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
 

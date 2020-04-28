@@ -1,6 +1,7 @@
 <!DOCTYPE php>
 <?php
 session_start();
+setcookie('isRevoting','false');
 ?>
 <html>
 

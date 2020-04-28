@@ -11,10 +11,7 @@ $currentplayer = 0;
 $currentstory = 0;
 $isPrevDisabled = true;
 $isNextDisabled = true;
-
-// This is where the answers will be stored, we should use array_push to add to it. this would allow for
-// the array to have a changeable size even if we wanted to add a story in the middle.
-$answers = array(array());
+$isRevoting = $_COOKIE['isRevoting'];
 
 if ($numPlayers == 1) $nextPlayerButtonName = "See Results";
 
@@ -40,6 +37,7 @@ $_SESSION['storiesArray'] = $storiesArray;
 <head>
   <title>Planning Poker</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="resources.js"></script>
 </head>
 
 <body>
@@ -126,15 +124,17 @@ $_SESSION['storiesArray'] = $storiesArray;
   </body>
 
 <!--javascript for button onclicks-->
+  <script  src="resources.js"></script>
   <script>
     let currentStory = <?php echo $currentstory; ?>;
     let storiesArray = <?php echo json_encode($storiesArray); ?>;
     let currentPlayer = <?php echo $currentplayer; ?>;
+    let isRevoting = <?php echo json_encode($isRevoting); ?>==="true";
     const NUM_PLAYERS = <?php echo $numPlayers; ?>;
     const cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
     const cardSets = <?php echo json_encode($cardSets); ?>;
-    let playerAnswers = initArray(NUM_PLAYERS,storiesArray.length);
-
+    let playerAnswers = (!isRevoting) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
+ 
     if (NUM_PLAYERS>1) {
       document.getElementById("nextplayerbutton").disabled = true;
     }
@@ -155,6 +155,7 @@ $_SESSION['storiesArray'] = $storiesArray;
     
     // Controls the functions of the next player button
     function nextPlayerButton() {
+      debugger;
       if (currentStory===storiesArray.length-1) {
         // Validate votes
         for (let i=0; i<storiesArray.length; i++) {
@@ -165,7 +166,7 @@ $_SESSION['storiesArray'] = $storiesArray;
         }
 
         if (currentPlayer===NUM_PLAYERS-1) {
-          //TODO: go to results page
+          // go to results page
           let results = JSON.stringify(playerAnswers);
           document.cookie = "results="+results;
           window.location.href="results.php";
@@ -215,19 +216,8 @@ $_SESSION['storiesArray'] = $storiesArray;
 
     // Inputs the selected card into the result array
     function cardselect(value) {
-      debugger;
         playerAnswers[currentPlayer][currentStory] = cardSets[cardSetChosen][value];
         alert("you chose: " + cardSets[cardSetChosen][value]);
     }
-
-    // Simple helper method to construct the 2D array
-    function initArray(nrows, ncols) {
-      let array = new Array(nrows);
-      for (let i=0; i<nrows; i++) {
-        array[i] = new Array(ncols);
-      }
-      return array;
-    }
-
   </script>
 </html>

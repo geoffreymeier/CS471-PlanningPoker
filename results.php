@@ -1,8 +1,9 @@
 <?php
-session_start();
-$numPlayers = $_SESSION['numplayers'];
-$velocity = $_SESSION['velocity'];
-$storiesArray = $_SESSION['storiesArray'];
+$numPlayers =  $_COOKIE['numplayers'];
+$velocity =  $_COOKIE['velocity'];
+$storiesArray =  json_decode($_COOKIE['storiesArray']);
+$cardset =  $_COOKIE['cardset'];
+
 
 // TODO: we need the answers from game.php
 $resultsString = $_COOKIE['results'];
@@ -31,7 +32,7 @@ $results = json_decode($resultsString);
         <h2>Results</h2>
         <p>See the results of your planning poker game below.</p><br>
 		<!-- Below is just an example for verification that the results were successfully transferred. They still need processed -->
-		<p><?php echo $resultsString ?></p>
+		<p><?php echo $resultsString; ?></p>
 
 		<p>TODO: display votes for each player for each story and average vote. Will probably need to style this as well.
 		</p>
@@ -42,10 +43,17 @@ $results = json_decode($resultsString);
 			<ul>
 			<?php
 			for ($i = 0; $i <= sizeof($storiesArray)-1; $i++) {
-				echo "<li>" . $storiesArray[$i] . " (Average vote: " . ")</li>";
+        $ave = 0;
+        $count = 0;
+        for ($j = 0; $j <= $numPlayers-1; $j++) {
+          $ave += $results[$j][$i];
+          $count++;
+        }
+        $ave /= $count;
+				echo "<li>" . $storiesArray[$i] . " (Average vote: " . $ave . ")</li>";
 				echo "<ul>";
 				for ($j = 0; $j <= $numPlayers-1; $j++) {
-				  echo "<li>Player " . $j . " voted: " . "</li>";
+				  echo "<li>Player " . $j . " voted: " . $results[$j][$i] . "</li>";
 				}
 				echo "</ul>";
 			}
@@ -60,14 +68,16 @@ $results = json_decode($resultsString);
 		execute if revoting (this will set the revoting flag for the game page):
 		document.cookie = "isRevoting=true"
 		-->
-		<a href="game.php" class="button">Revote</a>
-        <a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
+		<a class="button" onclick="revote()">Revote</a>
+    <a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
+    <a class="button" onclick="restart()">Restart</a>
 
-	</main>
+  </main>
 
 </body>
 
 <script>
+
 // Set the following vars as constants, since we don't want to accidentally change them from this page
 const NUM_PLAYERS = <?php echo json_encode($numPlayers); ?>;
 const STORIES_ARRAY = <?php echo json_encode($storiesArray); ?>;
@@ -111,6 +121,16 @@ function getData() {
 		array.push(JSON.parse(jsonstr));
 	}
 	return array;
+}
+  
+function revote() {
+  document.cookie = "restartable = 0";
+  window.location.href="game.php";
+}
+
+function restart() {
+  document.cookie = "restartable = true";
+  window.location.href="game.php";
 }
 </script>
 

@@ -1,7 +1,6 @@
 <!DOCTYPE php>
 <!--DATA-->
 <?php
-session_start();
 $numPlayers = $_POST['numplayers'];
 $velocity = $_POST['velocity'];
 $stories = trim($_POST['stories']);
@@ -14,9 +13,7 @@ $isPrevDisabled = true;
 $isNextDisabled = true;
 $isRevoting = $_COOKIE['isRevoting'];
 
-if ($numPlayers == 1) $nextPlayerButtonName = "See Results";
 
-if (sizeof($storiesArray) > 1) $isNextDisabled = false;
 $cardSets = array(
   array(0,1,2,3,5,8,13,21,34,55,89),
   array(0,0.5,1,2,3,5,8,13,20,40,100),
@@ -25,13 +22,19 @@ $cardSets = array(
 );
 $cardSetChosen = 0;
 if ($_POST['cardset'] == 'modfibonacci') $cardSetChosen = 1;
-if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
-if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
+else if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
+else if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
 
-$_SESSION['numplayers'] = $_POST['numplayers'];
-$_SESSION['velocity'] = $_POST['velocity'];
-$_SESSION['storiesArray'] = $storiesArray;
-$_SESSION['cardset'] = $_POST['cardset'];
+if ($_COOKIE['restartable'] == true) {
+  $numPlayers = $_COOKIE['numplayers'];
+  $velocity = $_COOKIE['velocity'];
+  $storiesArray =  json_decode($_COOKIE['storiesArray']);
+  $cardSetChosen = $_COOKIE['cardSetChosen'];
+}
+
+$nextPlayerButtonName = ($numPlayers == 1) ? "See Results" : "Next Player";
+
+if (sizeof($storiesArray) > 1) $isNextDisabled = false;
 ?>
 
 <html>
@@ -57,7 +60,7 @@ $_SESSION['cardset'] = $_POST['cardset'];
           <div id="currentStoryTitle">
 
             <?php echo "Story: &nbsp$storiesArray[0] | Player ",$currentplayer+1; ?>
-            
+
           </div>
         </h2>
 
@@ -67,13 +70,14 @@ $_SESSION['cardset'] = $_POST['cardset'];
         <button type="button" class="bluebutton" id="nextbutton" name="nextbutton" onclick="nextButton()"
         <?php echo $isNextDisabled?'disabled':''; ?>>
         Next Story</button>
-        <button type="button" id="resetbutton">Reset Cards</button>
-        <button type="button" id="nextplayerbutton" onclick="nextPlayerButton()">Next Player</button>
+        <button type="button" id="resetbutton" onclick="rcButton()">Reset Card</button>
+        <button type="button" id="nextplayerbutton" onclick="nextPlayerButton()">
+          <?php echo $nextPlayerButtonName; ?></button>
 
           <br><br><br>
           <?php
           for ($x = 1; $x <= $numPlayers; $x++) {
-            echo "<img src='hiddencard.PNG'  height='60' alt=''> Player $x&nbsp&nbsp&nbsp";
+            echo "<img src='b4selectcard.PNG' id='playercardImage$x'  height='80' alt=''> Player $x&nbsp&nbsp&nbsp";
           }
           ?>
         </div>
@@ -85,12 +89,12 @@ $_SESSION['cardset'] = $_POST['cardset'];
           </div>
           <?php
           for ($j = 0; $j <= sizeof($cardSets[$cardSetChosen])-1; $j++) {
-              echo "<button class='card' onclick='cardselect($j)'>" . $cardSets[$cardSetChosen][$j] . "</button>";
+              echo "<button class='card' id='c$j' onclick='cardselect($j)'>" . $cardSets[$cardSetChosen][$j] . "</button>";
           }
           ?>
-          <button class="card" id="noClueCard">?</button>
-        
-            
+          <button class="card" id="noClueCard" onclick="cardselect(-1)">?</button>
+
+
         </div>
       </div>
 
@@ -118,7 +122,7 @@ $_SESSION['cardset'] = $_POST['cardset'];
         <!--BOTTOMRIGHT-->
         <div class="rbottom">
           <button type="button" id="addstorybutton">+ Add Story</button><br>
-          <button type="button" id="endbutton">End Game</button>
+          <button type="button" class="bluebutton" id="endbutton">End Game</button>
         </div>
       </div>
     </div>
@@ -133,8 +137,10 @@ $_SESSION['cardset'] = $_POST['cardset'];
     let currentPlayer = <?php echo $currentplayer; ?>;
     let isRevoting = <?php echo json_encode($isRevoting); ?>==="true";
     const NUM_PLAYERS = <?php echo $numPlayers; ?>;
+    const VELOCITY = <?php echo $velocity; ?>;
     const cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
     const cardSets = <?php echo json_encode($cardSets); ?>;
+    let playerCardChoosenIndex = initArray(NUM_PLAYERS,storiesArray.length);
     let playerAnswers = (!isRevoting) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
  
     if (NUM_PLAYERS>1) {
@@ -145,7 +151,7 @@ $_SESSION['cardset'] = $_POST['cardset'];
       if (currentStory!==storiesArray.length-1) {
         currentStory++;
         updateUI();
-      } 
+      }
     }
 
     function prevButton() {
@@ -154,30 +160,31 @@ $_SESSION['cardset'] = $_POST['cardset'];
         updateUI();
       }
     }
-    
+
+    function rcButton() {
+      playerCardChoosenIndex[currentPlayer][currentStory] = null;
+      playerAnswers[currentPlayer][currentStory] = null;
+      updateUI();
+    }
+
     // Controls the functions of the next player button
     function nextPlayerButton() {
-      debugger;
-      if (currentStory===storiesArray.length-1) {
-        // Validate votes
-        for (let i=0; i<storiesArray.length; i++) {
-          if (playerAnswers[currentPlayer][i]==undefined) {
-            alert(`No vote recorded for Story ${i+1}: ${storiesArray[i]}. Please vote before moving to the next player.`);
-            return;
-          }
-        }
-
-        if (currentPlayer===NUM_PLAYERS-1) {
-          // go to results page
-          let results = JSON.stringify(playerAnswers);
-          document.cookie = "results="+results;
-          window.location.href="results.php";
-        }
-        else {
-          currentPlayer++;
-          currentStory = 0;
-          updateUI();
-        }
+      // Validate votes
+      if (currentPlayer===NUM_PLAYERS-1) {
+        //TODO: go to results page
+        let results = JSON.stringify(playerAnswers);
+        let sa = JSON.stringify(storiesArray);
+        document.cookie = "results="+results;
+        document.cookie = "numplayers="+NUM_PLAYERS;
+        document.cookie = "velocity="+VELOCITY;
+        document.cookie = "storiesArray="+sa;
+        document.cookie = "cardSetChosen="+cardSetChosen;
+        window.location.href="results.php";
+      }
+      else {
+        currentPlayer++;
+        currentStory = 0;
+        updateUI();
       }
     }
 
@@ -189,37 +196,63 @@ $_SESSION['cardset'] = $_POST['cardset'];
         document.getElementById(storyid).style.backgroundColor = (i===currentStory) ? "white" : "#EAEAEA";
       }
       document.getElementById("currentStoryHeader").innerHTML = (currentStory+1).toString() + "/" + storiesArray.length;
-      
+
       /*** UPDATE THE NAVBAR ***/
-      document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]} | Player ${currentPlayer+1}`;
-      
+      document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]}
+      | Player ${currentPlayer+1}`;
+
       // Previous Story Button
-      if (currentStory==0) 
+      if (currentStory==0)
         document.getElementById("prevbutton").disabled = true;
-      else 
+      else
         document.getElementById("prevbutton").disabled = false;
-      
+
       // Next Story Button
       if (currentStory==storiesArray.length-1)
         document.getElementById("nextbutton").disabled = true;
       else
         document.getElementById("nextbutton").disabled = false;
-      
+
       // Next Player Button
-      if (currentStory==storiesArray.length-1)
+      let allowNextPlayer = true;
+      for (let i=0; i<storiesArray.length; i++) {
+        if (playerAnswers[currentPlayer][i]==undefined) {
+          allowNextPlayer = false;
+          break;
+        }
+      }
+      if (allowNextPlayer == true)
         document.getElementById("nextplayerbutton").disabled = false;
-      else 
+      else
         document.getElementById("nextplayerbutton").disabled = true;
-      if (currentPlayer===NUM_PLAYERS-1) 
+      if (currentPlayer===NUM_PLAYERS-1)
         document.getElementById("nextplayerbutton").innerHTML = "See Results";
       else
         document.getElementById("nextplayerbutton").innerHTML = "Next Player";
+
+      // Card Display
+      for (let i=1; i<=NUM_PLAYERS; i++) {
+        let imgid = "playercardImage" + i;
+        document.getElementById(imgid).src = (playerAnswers[i-1][currentStory] == null) ?
+         "b4selectcard.PNG" : "hiddencard.PNG";
+      }
+      for (let i=0; i < cardSets[cardSetChosen].length; i++) {
+        let cid = "c" + i;
+        document.getElementById(cid).style.backgroundColor =
+        (playerCardChoosenIndex[currentPlayer][currentStory] != i) ? "#0572DC" : "188DFF";
+      }
+      document.getElementById("noClueCard").style.backgroundColor =
+      (playerCardChoosenIndex[currentPlayer][currentStory] != -1) ? "#F3F3F3" :  "white";
+
     }
 
     // Inputs the selected card into the result array
     function cardselect(value) {
-        playerAnswers[currentPlayer][currentStory] = cardSets[cardSetChosen][value];
-        alert("you chose: " + cardSets[cardSetChosen][value]);
+      playerCardChoosenIndex[currentPlayer][currentStory] = value;
+      playerAnswers[currentPlayer][currentStory] = (value != -1) ? cardSets[cardSetChosen][value] : "?";
+      updateUI();
     }
   </script>
 </html>
+
+

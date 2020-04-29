@@ -68,13 +68,14 @@ $results = json_decode($resultsString);
 		execute if revoting (this will set the revoting flag for the game page):
 		document.cookie = "isRevoting=true"
 		-->
-		<a class="button" onclick="revote()">Revote</a>
+		<a class="button" onclick="revoteConfirm()">Revote</a>
     <a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
     <a class="button" onclick="restart()">Restart</a>
 
   </main>
 
 </body>
+
 
 <script>
 
@@ -131,6 +132,13 @@ function revote() {
 function restart() {
   document.cookie = "restartable = true";
   window.location.href="game.php";
+}
+  
+function revoteConfirm() {
+  if (confirm("Are you sure you want to revote?")) {
+    document.cookie = "isRevoting=true";
+    revote();
+}
 }
 </script>
 

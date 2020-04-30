@@ -2,10 +2,8 @@
 $numPlayers =  $_COOKIE['numplayers'];
 $velocity =  $_COOKIE['velocity'];
 $storiesArray =  json_decode($_COOKIE['storiesArray']);
-$cardset =  $_COOKIE['cardset'];
+//$cardset =  $_COOKIE['cardset'];
 
-
-// TODO: we need the answers from game.php
 $resultsString = $_COOKIE['results'];
 $results = json_decode($resultsString);
 
@@ -19,6 +17,7 @@ $results = json_decode($resultsString);
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
     <link href="graph_resources/jquery.dvstr_jqp_graph.css" rel="stylesheet" type="text/css"/>
     <script src="graph_resources/jquery.dvstr_jqp_graph.js" type="text/javascript"></script>
+
 </head>
 
 <body>
@@ -31,11 +30,7 @@ $results = json_decode($resultsString);
     <main>
         <h2>Results</h2>
         <p>See the results of your planning poker game below.</p><br>
-		<!-- Below is just an example for verification that the results were successfully transferred. They still need processed -->
-		<p><?php echo $resultsString; ?></p>
 
-		<p>TODO: display votes for each player for each story and average vote. Will probably need to style this as well.
-		</p>
 		<h3>Sprint Velocity:</h3>
 			<p><?php echo $velocity; ?></p>
 		<h3>User stories:</h3>
@@ -43,13 +38,13 @@ $results = json_decode($resultsString);
 			<ul>
 			<?php
 			for ($i = 0; $i <= sizeof($storiesArray)-1; $i++) {
-        $ave = 0;
-        $count = 0;
-        for ($j = 0; $j <= $numPlayers-1; $j++) {
-          $ave += $results[$j][$i];
-          $count++;
-        }
-        $ave /= $count;
+				$ave = 0;
+				$count = 0;
+				for ($j = 0; $j <= $numPlayers-1; $j++) {
+				  $ave += $results[$j][$i];
+				  $count++;
+				}
+				$ave /= $count;
 				echo "<li>" . $storiesArray[$i] . " (Average vote: " . $ave . ")</li>";
 				echo "<ul>";
 				for ($j = 0; $j <= $numPlayers-1; $j++) {
@@ -63,75 +58,89 @@ $results = json_decode($resultsString);
 		<!-- <h3>Graph:</h3> -->
 		<div class="graph" id="graph"></div>
 		<br>
-		<!-- 
-		When creating the revote button onclick JS function, please add following line to
-		execute if revoting (this will set the revoting flag for the game page):
-		document.cookie = "isRevoting=true"
-		-->
-		<a class="button" onclick="revote()">Revote</a>
-    <a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
-    <a class="button" onclick="restart()">Restart</a>
 
-  </main>
+		<a class="button" onclick="revote()">Revote</a>
+		<a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
+		<a class="button" onclick="restart()">Restart</a>
+
+	</main>
 
 </body>
 
 <script>
+			// Set the following vars as constants, since we don't want to accidentally change them from this page
+			const NUM_PLAYERS = <?php echo json_encode($numPlayers); ?>;
+			const STORIES_ARRAY = <?php echo json_encode($storiesArray); ?>;
+			const RESULTS = JSON.parse(getCookie('results'));
+			const CARDSET = <?php echo json_encode($_SESSION['cardset']); ?>;
 
-// Set the following vars as constants, since we don't want to accidentally change them from this page
-const NUM_PLAYERS = <?php echo json_encode($numPlayers); ?>;
-const STORIES_ARRAY = <?php echo json_encode($storiesArray); ?>;
-const RESULTS = JSON.parse(getCookie('results'));
-const CARDSET = <?php echo json_encode($_SESSION['cardset']); ?>;
-
-// Since t-shirt sizes are incompatible with graph, display message instead of graph if that 
-// card set was used
-if (CARDSET !== "tshirts") 
-	createGraph();
-else
-	document.getElementById("graph").innerHTML = "<h2 style=\"color:red\">Note: Can't display graph for t-shirt card set; pick a different card set to use this feature.</h2><br>";
+			// Since t-shirt sizes are incompatible with graph, display message instead of graph if that 
+			// card set was used
+			if (CARDSET !== "tshirts") 
+				createGraph();
+			else
+				document.getElementById("graph").innerHTML = "<h2 style=\"color:red\">Note: Can't display graph for t-shirt card set; pick a different card set to use this feature.</h2><br>";
 
 
-// Create the results graph
-function createGraph() {
-	$('#graph').dvstr_graph({
-		title: 'Results Graph',
-		unit: 'Story Points',
-		separate: true,
-		graphs: getData(),
-	})
-}
+			// Create the results graph
+			function createGraph() {
+				$('#graph').dvstr_graph({
+					title: 'Results Graph',
+					unit: 'Story Points',
+					separate: true,
+					graphs: getData(),
+				})
+			}
 
-// Create the "graphs" option for the graph
-function getData() {
-	let array = [];
-	for (i=0; i<STORIES_ARRAY.length; i++) {
-		let jsonstr = "{";
-		//label
-		jsonstr += `"label":"${STORIES_ARRAY[i]}",`;
-		//color array
-		jsonstr += `"color":[`;
-		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `"${getGraphColor(j)}",`;
-		jsonstr += `"${getGraphColor(NUM_PLAYERS-1)}"],`;
-		//value array
-		jsonstr += `"value":[`;
-		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `${RESULTS[j][i]},`;
-		jsonstr += `${RESULTS[NUM_PLAYERS-1][i]}]}`;
-		debugger;
-		array.push(JSON.parse(jsonstr));
-	}
-	return array;
-}
-  
-function revote() {
-  document.cookie = "restartable = 0";
-  window.location.href="game.php";
-}
+			// Create the "graphs" option for the graph
+			function getData() {
+				let array = [];
+				for (i=0; i<STORIES_ARRAY.length; i++) {
+					let jsonstr = "{";
+					//label
+					jsonstr += `"label":"${STORIES_ARRAY[i]}",`;
+					//color array
+					jsonstr += `"color":[`;
+					for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `"${getGraphColor(j)}",`;
+					jsonstr += `"${getGraphColor(NUM_PLAYERS-1)}"],`;
+					//value array
+					jsonstr += `"value":[`;
+					for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `${RESULTS[j][i]},`;
+					jsonstr += `${RESULTS[NUM_PLAYERS-1][i]}]}`;
+					debugger;
+					array.push(JSON.parse(jsonstr));
+				}
+				return array;
+			}
+			
+			function revote() {
+			  document.cookie = "restartable = 0";
+			  window.location.href="game.php";
+			}
+			  
+			function revoteConfirm() {
+				if (confirm("Are you sure you want to revote?")) {
+					// this will set the revoting flag for the game page
+					document.cookie = "isRevoting=true";
+					revote();
+				}
+			}
+			
+			function restart() {
+			  document.cookie = "restartable = true";
+			  window.location.href="lobby.php";
+			}
+			
+			function restartConfirm() {
+				if (confirm("Are you sure you want to create a new game?")) {
+					restart();
+				}
+			}
+		</script>
+	</main>
 
-function restart() {
-  document.cookie = "restartable = true";
-  window.location.href="game.php";
-}
 </script>
+
+</body>
 
 </html>

@@ -11,7 +11,13 @@ $currentplayer = 0;
 $currentstory = 0;
 $isPrevDisabled = true;
 $isNextDisabled = true;
-$isRevoting = $_COOKIE['isRevoting'];
+
+// We need to check if the cookie even exists before setting it, or we get an error
+if(isset($_COOKIE['isRevoting'])) {
+	$isRevoting = $_COOKIE['isRevoting'];
+} else {
+	$isRevoting = false;
+}
 
 
 $cardSets = array(
@@ -25,11 +31,13 @@ if ($_POST['cardset'] == 'modfibonacci') $cardSetChosen = 1;
 else if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
 else if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
 
-if ($_COOKIE['restartable'] == true) {
-  $numPlayers = $_COOKIE['numplayers'];
-  $velocity = $_COOKIE['velocity'];
-  $storiesArray =  json_decode($_COOKIE['storiesArray']);
-  $cardSetChosen = $_COOKIE['cardSetChosen'];
+if(isset($_COOKIE['restartable'])) {
+	if ($_COOKIE['restartable'] == true) {
+	  $numPlayers = $_COOKIE['numplayers'];
+	  $velocity = $_COOKIE['velocity'];
+	  $storiesArray =  json_decode($_COOKIE['storiesArray']);
+	  $cardSetChosen = $_COOKIE['cardSetChosen'];
+	}
 }
 
 $nextPlayerButtonName = ($numPlayers == 1) ? "See Results" : "Next Player";

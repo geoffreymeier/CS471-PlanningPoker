@@ -42,8 +42,7 @@ function resetCookies() {
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
 
-	document.cookie = "isRevoting=false";
-	document.cookie = "restartable=0";
+    document.cookie = "isRevoting=false";
 }
 
 // Get a color for the graph based on a given index

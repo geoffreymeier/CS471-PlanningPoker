@@ -1,12 +1,26 @@
 <!DOCTYPE php>
 <!--DATA-->
 <?php
-$numPlayers = $_POST['numplayers'];
-$velocity = $_POST['velocity'];
-$stories = trim($_POST['stories']);
-$stories = str_replace("\r", "", $stories);
-$storiesArray = explode("\n", $stories);
-$storiesArray = array_filter($storiesArray, 'trim');
+if (isset($_COOKIE['restartable']) && $_COOKIE['restartable'] == "true" || isset($_COOKIE['isRevoting']) && $_COOKIE['isRevoting'] == "true") {
+  $numPlayers = $_COOKIE['numplayers'];
+  $velocity = $_COOKIE['velocity'];
+  $storiesArray =  json_decode($_COOKIE['storiesArray']);
+  $cardSetChosen = $_COOKIE['cardSetChosen'];
+  $cardSet = $_COOKIE['cardset'];
+}
+else {
+  $numPlayers = $_POST['numplayers'];
+  $velocity = $_POST['velocity'];
+  $stories = trim($_POST['stories']);
+  $stories = str_replace("\r", "", $stories);
+  $storiesArray = explode("\n", $stories);
+  $storiesArray = array_filter($storiesArray, 'trim');
+  $cardSet = $_POST['cardset'];
+  $cardSetChosen = 0;
+  if ($_POST['cardset'] == 'modfibonacci') $cardSetChosen = 1;
+  else if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
+  else if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
+}
 $currentplayer = 0;
 $currentstory = 0;
 $isPrevDisabled = true;
@@ -20,18 +34,6 @@ $cardSets = array(
   array("XXS","XS","S","M","L","XL","XXL"),
   array(0,1,2,4,8,16,32,64)
 );
-$cardSetChosen = 0;
-if ($_POST['cardset'] == 'modfibonacci') $cardSetChosen = 1;
-else if ($_POST['cardset'] == 'tshirts') $cardSetChosen = 2;
-else if ($_POST['cardset'] == 'powers') $cardSetChosen = 3;
-
-
-if ($_COOKIE['restartable'] == true) {
-	  $numPlayers = $_COOKIE['numplayers'];
-	  $velocity = $_COOKIE['velocity'];
-	  $storiesArray =  json_decode($_COOKIE['storiesArray']);
-	  $cardSetChosen = $_COOKIE['cardSetChosen'];
-}
 
 $nextPlayerButtonName = ($numPlayers == 1) ? "See Results" : "Next Player";
 
@@ -137,16 +139,19 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
     let storiesArray = <?php echo json_encode($storiesArray); ?>;
     let currentPlayer = <?php echo $currentplayer; ?>;
     let isRevoting = <?php echo json_encode($isRevoting); ?>==="true";
+    let isRestarted = <?php echo json_encode($_COOKIE['restartable']); ?>==="true";
     const NUM_PLAYERS = <?php echo $numPlayers; ?>;
     const VELOCITY = <?php echo $velocity; ?>;
     const cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;
     const cardSets = <?php echo json_encode($cardSets); ?>;
     let playerCardChoosenIndex = initArray(NUM_PLAYERS,storiesArray.length);
-    let playerAnswers = (!isRevoting) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
+    let playerAnswers = (!isRevoting || isRestarted) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
  
-    if (NUM_PLAYERS>1) {
-      document.getElementById("nextplayerbutton").disabled = true;
-    }
+    // if (NUM_PLAYERS>1) {
+    //   document.getElementById("nextplayerbutton").disabled = true;
+    // }
+
+    updateUI();
 
     function nextButton() {
       if (currentStory!==storiesArray.length-1) {
@@ -180,6 +185,7 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
         document.cookie = "velocity="+VELOCITY;
         document.cookie = "storiesArray="+sa;
         document.cookie = "cardSetChosen="+cardSetChosen;
+        document.cookie = "cardset=<?php echo $cardSet?>"
         window.location.href="results.php";
       }
       else {

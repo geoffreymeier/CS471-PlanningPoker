@@ -30,6 +30,21 @@ function getCookie(cname) {
     return "";
 }
 
+// Deletes all cookies, and then resets isRevoting to false
+function resetCookies() {
+	//DELETE COOKIES
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+		var cookie = cookies[i];
+		var eqPos = cookie.indexOf("=");
+		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+
+    document.cookie = "isRevoting=false";
+}
+
 // Get a color for the graph based on a given index
 function getGraphColor(index) {
 	// COLORS credit: https://gist.github.com/mucar/3898821#gistcomment-2714112

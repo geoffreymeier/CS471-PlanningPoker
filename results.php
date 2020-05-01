@@ -59,86 +59,81 @@ $results = json_decode($resultsString);
 		<div class="graph" id="graph"></div>
 		<br>
 
-		<a class="button" onclick="revote()">Revote</a>
-		<a href="lobby.php" class="button" id="createNewGame">Create New Game</a>
+		<a class="button" onclick="revoteConfirm()">Revote</a>
+		<a class="button" id="createNewGame" onclick="newGame()">Create New Game</a>
 		<a class="button" onclick="restart()">Restart</a>
 
 	</main>
 
 </body>
 
+<script  src="resources.js"></script>
 <script>
-			// Set the following vars as constants, since we don't want to accidentally change them from this page
-			const NUM_PLAYERS = <?php echo json_encode($numPlayers); ?>;
-			const STORIES_ARRAY = <?php echo json_encode($storiesArray); ?>;
-			const RESULTS = JSON.parse(getCookie('results'));
-			const CARDSET = <?php echo json_encode($_SESSION['cardset']); ?>;
+// Set the following vars as constants, since we don't want to accidentally change them from this page
+const NUM_PLAYERS = parseInt(getCookie('numplayers'));
+const STORIES_ARRAY = JSON.parse(getCookie('storiesArray'));
+const RESULTS = JSON.parse(getCookie('results'));
+const CARDSET = getCookie('cardset');
 
-			// Since t-shirt sizes are incompatible with graph, display message instead of graph if that 
-			// card set was used
-			if (CARDSET !== "tshirts") 
-				createGraph();
-			else
-				document.getElementById("graph").innerHTML = "<h2 style=\"color:red\">Note: Can't display graph for t-shirt card set; pick a different card set to use this feature.</h2><br>";
+// Since t-shirt sizes are incompatible with graph, display message instead of graph if that 
+// card set was used
+if (CARDSET !== "tshirts") 
+	createGraph();
+else
+	document.getElementById("graph").innerHTML = "<h2 style=\"color:red\">Note: Can't display graph for t-shirt card set; pick a different card set to use this feature.</h2><br>";
 
 
-			// Create the results graph
-			function createGraph() {
-				$('#graph').dvstr_graph({
-					title: 'Results Graph',
-					unit: 'Story Points',
-					separate: true,
-					graphs: getData(),
-				})
-			}
+// Create the results graph
+function createGraph() {
+	$('#graph').dvstr_graph({
+		title: 'Results Graph',
+		unit: 'Story Points',
+		separate: true,
+		graphs: getData(),
+	})
+}
 
-			// Create the "graphs" option for the graph
-			function getData() {
-				let array = [];
-				for (i=0; i<STORIES_ARRAY.length; i++) {
-					let jsonstr = "{";
-					//label
-					jsonstr += `"label":"${STORIES_ARRAY[i]}",`;
-					//color array
-					jsonstr += `"color":[`;
-					for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `"${getGraphColor(j)}",`;
-					jsonstr += `"${getGraphColor(NUM_PLAYERS-1)}"],`;
-					//value array
-					jsonstr += `"value":[`;
-					for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `${RESULTS[j][i]},`;
-					jsonstr += `${RESULTS[NUM_PLAYERS-1][i]}]}`;
-					debugger;
-					array.push(JSON.parse(jsonstr));
-				}
-				return array;
-			}
-			
-			function revote() {
-			  document.cookie = "restartable = 0";
-			  window.location.href="game.php";
-			}
-			  
-			function revoteConfirm() {
-				if (confirm("Are you sure you want to revote?")) {
-					// this will set the revoting flag for the game page
-					document.cookie = "isRevoting=true";
-					revote();
-				}
-			}
-			
-			function restart() {
-			  document.cookie = "restartable = true";
-			  window.location.href="lobby.php";
-			}
-			
-			function restartConfirm() {
-				if (confirm("Are you sure you want to create a new game?")) {
-					restart();
-				}
-			}
-		</script>
-	</main>
+// Create the "graphs" option for the graph
+function getData() {
+	let array = [];
+	for (i=0; i<STORIES_ARRAY.length; i++) {
+		let jsonstr = "{";
+		//label
+		jsonstr += `"label":"${STORIES_ARRAY[i]}",`;
+		//color array
+		jsonstr += `"color":[`;
+		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `"${getGraphColor(j)}",`;
+		jsonstr += `"${getGraphColor(NUM_PLAYERS-1)}"],`;
+		//value array
+		jsonstr += `"value":[`;
+		for (j=0; j<NUM_PLAYERS-1; j++) jsonstr += `${RESULTS[j][i]},`;
+		jsonstr += `${RESULTS[NUM_PLAYERS-1][i]}]}`;
+		array.push(JSON.parse(jsonstr));
+	}
+	return array;
+}
+  
+function revote() {
+  document.cookie = "restartable = 0";
+  window.location.href="game.php";
+}
 
+function restart() {
+  document.cookie = "restartable = true";
+  window.location.href="game.php";
+}
+  
+function revoteConfirm() {
+  if (confirm("Are you sure you want to revote?")) {
+    document.cookie = "isRevoting=true";
+    revote();
+  }
+}
+
+function newGame() {
+	resetCookies();
+	window.location.href="lobby.php";
+}
 </script>
 
 </body>

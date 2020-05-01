@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="resources.js"></script>
     <script>
     $(document).ready(function(){
         $("#getStarted").click(function(){
@@ -13,6 +14,7 @@
             }).fadeIn();
         });
     });
+
     </script>
     <title>Planning Poker</title>
 </head>

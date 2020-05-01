@@ -1,9 +1,6 @@
 <!DOCTYPE php>
-<?php
-setcookie('isRevoting','false');
-?>
 <html>
-<script>
+<!-- <script>
 
 //DELETE COOKIES
 var cookies = document.cookie.split(";");
@@ -15,7 +12,10 @@ for (var i = 0; i < cookies.length; i++) {
   document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
 
-</script>
+document.cookie = "isRevoting=false";
+
+</script> -->
+<script  src="resources.js"></script>
 <head>
     <title>Lobby | Planning Poker</title>
     <link rel="stylesheet" href="styles.css">
@@ -70,6 +70,8 @@ for (var i = 0; i < cookies.length; i++) {
 </html>
 
 <script type="text/javascript">
+resetCookies();
+
 function handleChange() {
     var nP = document.getElementById("numplayers").value;
     var vel = document.getElementById("velocity").value;

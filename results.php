@@ -119,10 +119,8 @@ function revote() {
 }
 
 function restart() {
-  if (confirm("Are you sure you want to restart?")) {
-    document.cookie = "restartable = true";
-    window.location.href="game.php";
-  }
+  document.cookie = "restartable = true";
+  window.location.href="game.php";
 }
   
 function revoteConfirm() {
@@ -133,12 +131,9 @@ function revoteConfirm() {
 }
 
 function newGame() {
-  if (confirm("Are you sure you want to create a new game?")) {
 	resetCookies();
 	window.location.href="lobby.php";
-  }
 }
-
 </script>
 
 </body>

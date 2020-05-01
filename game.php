@@ -35,6 +35,15 @@ $cardSets = array(
   array(0,1,2,4,8,16,32,64)
 );
 
+if ($isRevoting == true) {
+    $numPlayers = $_COOKIE['numplayers'];
+    $velocity = $_COOKIE['velocity'];
+    $storiesArray =  json_decode($_COOKIE['storiesArray']);
+    $cardSetChosen = $_COOKIE['cardSetChosen'];
+    $oldAnswerString = $_Cookie['results'];
+    $oldAnswer = json_decode($oldAnswerString);
+}
+
 $nextPlayerButtonName = ($numPlayers == 1) ? "See Results" : "Next Player";
 
 if (sizeof($storiesArray) > 1) $isNextDisabled = false;
@@ -62,7 +71,7 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
         <h2>
           <div id="currentStoryTitle">
 
-            <?php echo "Story: &nbsp$storiesArray[0] | Player ",$currentplayer+1; ?>
+            <?php echo "Story: &nbsp$storiesArray[0] | Player ",$currentplayer+1;?>
 
           </div>
         </h2>
@@ -135,6 +144,7 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
 <!--javascript for button onclicks-->
   <script  src="resources.js"></script>
   <script>
+    window.addEventListener('load', updateUI, false);
     let currentStory = <?php echo $currentstory; ?>;
     let storiesArray = <?php echo json_encode($storiesArray); ?>;
     let currentPlayer = <?php echo $currentplayer; ?>;
@@ -146,6 +156,7 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
     const cardSets = <?php echo json_encode($cardSets); ?>;
     let playerCardChoosenIndex = initArray(NUM_PLAYERS,storiesArray.length);
     let playerAnswers = (!isRevoting || isRestarted) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
+    let oldAnswers = (!isRevoting) ? initArray(NUM_PLAYERS,storiesArray.length) : JSON.parse(getCookie("results"));
  
     // if (NUM_PLAYERS>1) {
     //   document.getElementById("nextplayerbutton").disabled = true;
@@ -205,8 +216,13 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
       document.getElementById("currentStoryHeader").innerHTML = (currentStory+1).toString() + "/" + storiesArray.length;
 
       /*** UPDATE THE NAVBAR ***/
-      document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]}
-      | Player ${currentPlayer+1}`;
+      if(isRevoting) {
+        document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]}
+        | Player ${currentPlayer+1} | Previous Answer: &nbsp${oldAnswers[currentPlayer][currentStory]}`;
+      } else {
+        document.getElementById("currentStoryTitle").innerHTML = `Story: &nbsp${storiesArray[currentStory]}
+        | Player ${currentPlayer+1}`;
+      }
 
       // Previous Story Button
       if (currentStory==0)

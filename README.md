@@ -4,7 +4,7 @@
 
 ## Project Description:
 Create a web or mobile application to allow Scrum teams to play Planning Poker.
-Github Pages URL: https://boisestate.github.io/CS471-S20-Team7/
+Heroku Hosted URL: https://cs471-team-7.herokuapp.com/
 
 ## Team Members:
 

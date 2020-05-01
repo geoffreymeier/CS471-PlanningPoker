@@ -31,6 +31,34 @@
         <p id="getStarted">Let's get started!</p>
     </div>
     </main>
+
+    <script type="text/javascript">
+resetCookies();
+
+function handleChange() {
+    var nP = document.getElementById("numplayers").value;
+    var vel = document.getElementById("velocity").value;
+    var area = document.getElementById("stories");
+    var arrayOfStories = area.value.replace(/\r\n|\n|\r/g,"\n");
+    arrayOfStories.split("\n");
+    if (nP < 1 || nP > 20) {
+        alert("Value should be between 1 - 20");
+        return false;
+    }
+    if (vel < 1) {
+      alert("Velocity should be greater than 0");
+      return false;
+    }
+    if (typeof arrayOfStories == "undefined"
+                        || arrayOfStories == null
+                        || arrayOfStories == null
+                        || arrayOfStories <= 0){
+      alert("User stories cannot be empty!");
+      return false;
+    }
+   return true;
+}
+</script>
     
 </body>
 

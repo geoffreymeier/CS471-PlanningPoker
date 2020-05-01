@@ -35,12 +35,12 @@ $cardSets = array(
   array(0,1,2,4,8,16,32,64)
 );
 
-if ($isRevoting == true) {
-    $numPlayers = $_COOKIE['numplayers'];
-    $velocity = $_COOKIE['velocity'];
-    $storiesArray =  json_decode($_COOKIE['storiesArray']);
-    $cardSetChosen = $_COOKIE['cardSetChosen'];
-    $oldAnswerString = $_Cookie['results'];
+if ($isRevoting === true) {
+    // $numPlayers = $_COOKIE['numplayers'];
+    // $velocity = $_COOKIE['velocity'];
+    // $storiesArray =  json_decode($_COOKIE['storiesArray']);
+    // $cardSetChosen = $_COOKIE['cardSetChosen'];
+    $oldAnswerString = $_COOKIE['results'];
     $oldAnswer = json_decode($oldAnswerString);
 }
 
@@ -148,8 +148,8 @@ if (sizeof($storiesArray) > 1) $isNextDisabled = false;
     let currentStory = <?php echo $currentstory; ?>;
     let storiesArray = <?php echo json_encode($storiesArray); ?>;
     let currentPlayer = <?php echo $currentplayer; ?>;
-    let isRevoting = <?php echo json_encode($isRevoting); ?>==="true";
-    let isRestarted = <?php echo json_encode($_COOKIE['restartable']); ?>==="true";
+    let isRevoting = <?php echo $isRevoting; ?>===true;
+    let isRestarted = <?php echo $_COOKIE['restartable']; ?>===true;
     const NUM_PLAYERS = <?php echo $numPlayers; ?>;
     const VELOCITY = <?php echo $velocity; ?>;
     const cardSetChosen = <?php echo json_encode($cardSetChosen); ?>;

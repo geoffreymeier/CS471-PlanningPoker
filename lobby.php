@@ -65,11 +65,7 @@ document.cookie = "isRevoting=false";
     </div>
     </main>
 
-</body>
-
-</html>
-
-<script type="text/javascript">
+    <script type="text/javascript">
 resetCookies();
 
 function handleChange() {
@@ -96,3 +92,11 @@ function handleChange() {
    return true;
 }
 </script>
+
+</body>
+
+
+
+</html>
+
+

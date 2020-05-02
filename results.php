@@ -114,13 +114,15 @@ function getData() {
 }
   
 function revote() {
-  document.cookie = "restartable = 0";
-  window.location.href="game.php";
+    document.cookie = "restartable = 0";
+    window.location.href="game.php";
 }
 
 function restart() {
-  document.cookie = "restartable = true";
-  window.location.href="game.php";
+  if (confirm("Are you sure you want to restart?")) {
+    document.cookie = "restartable = true";
+    window.location.href="game.php";
+  }
 }
   
 function revoteConfirm() {
@@ -131,8 +133,10 @@ function revoteConfirm() {
 }
 
 function newGame() {
+  if (confirm("Are you sure you want to start a new game?")) {
 	resetCookies();
 	window.location.href="lobby.php";
+  }
 }
 </script>
 
